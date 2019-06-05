@@ -1,26 +1,57 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from 'react';
+import { render } from 'react-dom';
+import './style.css';
+import Card from './Card/Card';
+import DrawButton from './DrawButton/DrawButton';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default class App extends Component {
+  constructor() {
+    super();
+    this.state = {
+      cards: [
+        {code: 'React.js?', phrase: ' Great Question! ', description:'is a JavaScript library for building user interfaces.'}
+        ],
+      currentCard: {}
+    }
+
+    this.updateCard = this.updateCard.bind(this);
+  }
+
+  componentWillMount() {
+    const currentCards = this.state.cards;
+
+    this.setState({
+      cards: currentCards,
+      currentCard: this.getRandomCard(currentCards)
+    });
+  }
+
+  getRandomCard(currentCards) {
+    let card = currentCards[Math.floor(Math.random() * currentCards.length)];
+    return card;
+  }
+
+  updateCard() {
+    const currentCards = this.state.cards;
+    this.setState({
+      currentCard: this.getRandomCard(currentCards)
+    })
+  }
+
+  render() {
+    return (
+      <div className='App'>
+      <h1>Flashcards</h1>
+        <div className='card-row'> 
+          <Card question={this.state.currentCard.code}
+                answer={this.state.currentCard.phrase}
+                description={this.state.currentCard.description} 
+          />
+        </div>
+        <div className='button-row'>
+          <DrawButton drawCard={this.updateCard} />
+        </div>
+      </div>
+    );
+  }
 }
-
-export default App;
